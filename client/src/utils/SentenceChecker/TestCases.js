@@ -1,4 +1,5 @@
 export const testCases = [
+    /**************** FIRST BATCH ********************/
 //   {
 //     "sentence" : 'The fox ate the bird and the rabbit.',
 //     "structure": '#Determiner #Noun #Verb #Determiner #Noun (and|or) #Determiner #Noun',
@@ -55,11 +56,11 @@ export const testCases = [
 //     "sentence" : 'The hard rock or the soft ball rolled.',
 //     "structure": '#Determiner #Adjective #Noun (and|or) #Determiner #Adjective #Noun #Verb',
 //   },
-    // {
-    //     //Issue: This test case has an issue where we have two similar structs.
-    // "sentence" : 'He and I ran.',
-    // "structure": '#Subject (and|or) #Subject #Verb',
-    // },
+//     {
+//         //Issue: This test case has an issue where we have two similar structs.
+//     "sentence" : 'He and I ran.',
+//     "structure": '#Subject (and|or) #Subject #Verb',
+//     },
 //     {
 //     "sentence" : 'A round egg flew.',
 //     "structure": '#Determiner #Adjective #Noun #Verb',
