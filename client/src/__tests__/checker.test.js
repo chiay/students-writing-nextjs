@@ -5,12 +5,9 @@ import {
 } from '../utils/SentenceChecker/StructureChecker';
 import { testCases } from '../utils/SentenceChecker/TestCases.js';
 
-for(let e of testCases) {
+for (let e of testCases) {
 	const s1 = e.sentence;
-	//const s2 = 'He loves her.';
-	const p1 = 'I like science. I like science. I like science.';
 	const s1Struct = e.structure;
-
 
 	describe('check', () => {
 		test('to fully match one structure and return boolean value', () => {
@@ -24,18 +21,6 @@ for(let e of testCases) {
 		});
 	});
 
-	// describe('paragraph check', () => {
-	// 	test('paragraph splitted', () => {
-	// 		const result = getFullParagraphCheck(p1);
-	// 		const expected = {
-	// 			sentence: 'I like science.',
-	// 			structure: '#Pronoun #Verb (#Adjective|#Noun)',
-	// 		};
-
-	// 		expect(result).toEqual([expected, expected, expected]);
-	// 	});
-	// });
-
 	describe('check custom tags plugin', () => {
 		test('if subject and object tags detected', () => {
 			const result = getFullStructCheck(s1);
@@ -44,6 +29,17 @@ for(let e of testCases) {
 	});
 }
 
+// const s2 = 'He loves her.';
+// const p1 = 'I like science. I like science. I like science.';
 
+// describe('paragraph check', () => {
+// 	test('paragraph splitted', () => {
+// 		const result = getFullParagraphCheck(p1);
+// 		const expected = {
+// 			sentence: 'I like science.',
+// 			structure: '#Pronoun #Verb (#Adjective|#Noun)',
+// 		};
 
-
+// 		expect(result).toEqual([expected, expected, expected]);
+// 	});
+// });
