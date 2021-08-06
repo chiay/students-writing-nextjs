@@ -51,7 +51,7 @@ export default function PromptOverview() {
 		};
 
 		getList();
-		getGrade();
+		//getGrade();
 		setLoading(false);
 		return () => cancel();
 	}, [id]);
