@@ -1,74 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useAuth } from '../contexts/AuthContext';
-import logo from '../images/logo.svg';
+import { Box, Flex, Spacer, useMediaQuery } from '@chakra-ui/react';
+import NavbarLinks from './NavbarLinks';
+import NavbarLogo from './NavbarLogo';
+import NavbarDropDown from './NavbarDropDown';
 
 export default function Navbar() {
-	const { currentUser, logout } = useAuth();
+	const [isMobile] = useMediaQuery('(max-width:480px)');
 
 	return (
-		<div className="container">
-			<nav className="nav flex flex-jc-sb flex-ai-c">
-				<div className="nav__logo flex flex-ai-c">
-					<div className="logo flex flex-jc-c flex-ai-c">
-						<img src={logo} alt="logo" width="30" height="30" />
-					</div>
-					<div className="title">
-						<Link to="/" className="text-lg link">
-							Students Writing
-						</Link>
-					</div>
-				</div>
-				<div className="nav__links">
-					<ul className="flex flex-jc-sa">
-						<motion.li
-							whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-						>
-							<Link to="/prompts" className="link">
-								Start Writing
-							</Link>
-						</motion.li>
-						<motion.li
-							whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-						>
-							<Link to="/about" className="link">
-								About
-							</Link>
-						</motion.li>
-						{/* <motion.li
-							whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-						>
-							<Link to="/contact" className="link">
-								Contact Us
-							</Link>
-						</motion.li> */}
-					</ul>
-				</div>
-				<div className="nav__user">
-					{!currentUser && (
-						<Link to="/signup" className="signupLink link">
-							Sign Up
-						</Link>
-					)}
-					{!currentUser ? (
-						<Link to="/login" className="loginLink link">
-							Login
-						</Link>
-					) : (
-						<>
-							<Link to="/dashboard" className="loginLink link">
-								{currentUser.data.alias
-									? currentUser.data.alias
-									: currentUser.data.email}
-							</Link>
-							<Link to="/" className="logoutLink link" onClick={logout}>
-								Log Out
-							</Link>
-						</>
-					)}
-				</div>
-			</nav>
-		</div>
+		<Box
+			p={['0.5rem', '1rem']}
+			mx={['0.25rem', '0.5rem']}
+			my="0.5rem"
+			bgGradient="linear(to-l, red.400, yellow.300)"
+			borderRadius="10px"
+		>
+			<Flex>
+				<NavbarLogo />
+				<Spacer />
+				{!isMobile && <NavbarLinks />}
+				<Spacer />
+				<NavbarDropDown />
+			</Flex>
+		</Box>
 	);
 }

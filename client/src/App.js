@@ -1,4 +1,6 @@
 import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from './styles/theme';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Signup from './pages/Signup';
@@ -12,19 +14,21 @@ import UserList from './pages/UserList';
 
 function App() {
 	return (
-		<AuthProvider>
-			<Router>
-				<Switch>
-					<Route path="/" component={Home} exact />
-					<Route path="/signup" component={Signup} />
-					<Route path="/login" component={Login} />
-					<PrivateRoute path="/dashboard" component={Dashboard} />
-					<PrivateRoute path="/admin/users" component={UserList} />
-					<Route path="/prompts" component={PromptList} />
-					<Route path="/overview/:id" component={PromptOverview} />
-				</Switch>
-			</Router>
-		</AuthProvider>
+		<ChakraProvider theme={theme}>
+			<AuthProvider>
+				<Router>
+					<Switch>
+						<Route path="/" component={Home} exact />
+						<Route path="/signup" component={Signup} />
+						<Route path="/login" component={Login} />
+						<PrivateRoute path="/dashboard" component={Dashboard} />
+						<PrivateRoute path="/admin/users" component={UserList} />
+						<Route path="/prompts" component={PromptList} />
+						<Route path="/overview/:id" component={PromptOverview} />
+					</Switch>
+				</Router>
+			</AuthProvider>
+		</ChakraProvider>
 	);
 }
 

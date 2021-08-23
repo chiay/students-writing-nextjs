@@ -8,7 +8,11 @@ import { useForm } from 'react-hook-form';
 
 export default function Dashboard() {
 	const { currentUser, token } = useAuth();
-	const { register, handleSubmit, errors } = useForm({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
 		defaultValues: {
 			firstName: currentUser.data.name.firstName,
 			lastName: currentUser.data.name.lastName,
@@ -72,11 +76,11 @@ export default function Dashboard() {
 
 	return (
 		<Layout>
-			{currentUser && currentUser.data.role === 'admin' && <AdminSidebar />}
+			{currentUser?.data.role === 'admin' && <AdminSidebar />}
 			<div className="dashboard">
 				<h2 className="dashboard__greeting">
 					Hello,{' '}
-					{currentUser && currentUser.data.alias
+					{currentUser?.data.alias
 						? currentUser.data.alias
 						: currentUser.data.email}
 				</h2>
