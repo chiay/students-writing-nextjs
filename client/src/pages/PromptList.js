@@ -42,7 +42,7 @@ export default function PromptList() {
 	return (
 		<Layout>
 			<div className="container promptList">
-				{currentUser && currentUser.data.role === 'admin' && (
+				{currentUser?.data.role === 'admin' && (
 					<div className="promptList__control flex flex-jc-fe">
 						<button
 							className="btnAddNew flex flex-jc-c"

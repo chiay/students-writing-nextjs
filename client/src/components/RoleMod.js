@@ -107,7 +107,7 @@ export default function RoleMod({ users, toggleModal }) {
 				<label className="formLabel">Email:</label>
 				<select
 					name="email"
-					ref={register}
+					{...register('email')}
 					onChange={(e) => handleChange(e)}
 				>
 					<option value="">Please select a user</option>
@@ -130,7 +130,7 @@ export default function RoleMod({ users, toggleModal }) {
 							{selectedUser.alias ? selectedUser.alias : 'Not Set'}
 						</label>
 						<label className="formLabel">Role:</label>
-						<select name="role" ref={register}>
+						<select name="role" {...register('role')}>
 							{roles.map((role) => (
 								<option key={role.value} value={role.value}>
 									{role.label}

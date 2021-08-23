@@ -39,14 +39,8 @@ export default function Dashboard() {
 				Authorization: `Bearer ${token}`,
 			},
 		};
-		const {
-			firstName,
-			lastName,
-			alias,
-			password,
-			confirmPassword,
-			grade,
-		} = data;
+		const { firstName, lastName, alias, password, confirmPassword, grade } =
+			data;
 
 		setError('');
 		setSuccess('');
@@ -114,7 +108,7 @@ export default function Dashboard() {
 										<input
 											name="firstName"
 											type="text"
-											ref={register}
+											{...register('firstName')}
 										/>
 									</td>
 								</tr>
@@ -124,14 +118,18 @@ export default function Dashboard() {
 										<input
 											name="lastName"
 											type="text"
-											ref={register}
+											{...register('lastName')}
 										/>
 									</td>
 								</tr>
 								<tr>
 									<td>Alias: </td>
 									<td>
-										<input name="alias" type="text" ref={register} />
+										<input
+											name="alias"
+											type="text"
+											{...register('alias')}
+										/>
 									</td>
 								</tr>
 								<tr>
@@ -141,7 +139,7 @@ export default function Dashboard() {
 											name="password"
 											type="password"
 											placeholder="Leave blank if unchanged"
-											ref={register({ minLength: 9 })}
+											{...register('password', { minLength: 9 })}
 										/>
 										{errors.password &&
 											errors.password.type === 'minLength' && (
@@ -158,7 +156,7 @@ export default function Dashboard() {
 											name="confirmPassword"
 											type="password"
 											placeholder="Leave blank if unchanged"
-											ref={register}
+											{...register('confirmPassword')}
 										/>
 									</td>
 								</tr>
@@ -169,7 +167,7 @@ export default function Dashboard() {
 								<tr>
 									<td>Grade:</td>
 									<td>
-										<select name="grade" ref={register}>
+										<select name="grade" {...register('grade')}>
 											{grades.map((grade) => (
 												<option
 													key={grade.value}

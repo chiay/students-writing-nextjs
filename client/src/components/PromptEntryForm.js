@@ -12,7 +12,12 @@ export default function PromptEntryForm({
 	prompt,
 	setModalOpen,
 }) {
-	const { register, handleSubmit, errors, control } = useForm({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control,
+	} = useForm({
 		mode: 'onChange',
 		defaultValues: {
 			title: prompt ? prompt.title : '',
@@ -181,14 +186,18 @@ export default function PromptEntryForm({
 					name="title"
 					type="text"
 					required
-					ref={register({ required: true })}
+					{...register('title', { required: true })}
 				/>
-				{errors.name && errors.title.type === 'required' && (
+				{errors.title?.type === 'required' && (
 					<p className="">This field is required.</p>
 				)}
 
 				<label className="formLabel">Description</label>
-				<input name="description" type="text" ref={register} />
+				<input
+					name="description"
+					type="text"
+					{...register('description')}
+				/>
 
 				<label className="formLabel">
 					Content (e.g. passage, extra info, etc.)
@@ -211,7 +220,7 @@ export default function PromptEntryForm({
 				/>
 
 				<label className="formLabel">Type*</label>
-				<select name="type" ref={register}>
+				<select name="type" {...register('type')}>
 					{types.map((type) => (
 						<option key={type.value} value={type.value}>
 							{type.label}
@@ -227,7 +236,7 @@ export default function PromptEntryForm({
 									type="checkbox"
 									name={`grade_${grade.label}`}
 									value={true}
-									ref={register}
+									{...register(`grade_${grade.label}`)}
 								/>
 								{grade.label}
 							</label>
