@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Modal from '../components/Modal';
 import PromptEntryForm from '../components/PromptEntryForm';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { Spinner, IconButton, Center, Grid, GridItem } from '@chakra-ui/react';
 
 export default function PromptList() {
 	const [list, setList] = useState();
@@ -41,42 +42,58 @@ export default function PromptList() {
 
 	return (
 		<Layout>
-			<div className="container promptList">
-				{currentUser?.data.role === 'admin' && (
-					<div className="promptList__control flex flex-jc-fe">
-						<button
-							className="btnAddNew flex flex-jc-c"
-							onClick={toggleModalOpen}
-						>
-							<AddCircleOutlineIcon />
-						</button>
-					</div>
-				)}
-
-				<Modal open={modalOpen}>
-					<PromptEntryForm
-						list={list}
-						setList={setList}
-						setModalOpen={toggleModalOpen}
+			{loading && (
+				<Center>
+					<Spinner
+						mt="2rem"
+						thickness="3px"
+						emptyColor="gray.200"
+						color="yellow.400"
+						size="md"
 					/>
-				</Modal>
+				</Center>
+			)}
 
-				{!loading && list ? (
-					list.map((prompt) => {
-						return (
-							<Link
-								to={`/overview/${prompt._id}`}
-								className="link"
-								key={prompt._id}
-							>
-								<Prompt key={prompt._id} prompt={prompt} />
-							</Link>
-						);
-					})
-				) : (
-					<label className="promptList__noContent">No content.</label>
-				)}
-			</div>
+			{!loading && (
+				<Center>
+					<Grid minW="80vw" templateColumns="repeat(12, 1fr)">
+						<GridItem colSpan="12" colStart="12">
+							{currentUser?.data.role === 'admin' && (
+								<IconButton
+									aria-label="add new prompt"
+									icon={<AddCircleOutlineIcon />}
+									colorScheme="orange"
+									onClick={toggleModalOpen}
+								/>
+							)}
+						</GridItem>
+						<GridItem colSpan="12" colStart="1">
+							{list ? (
+								list.map((prompt) => {
+									return (
+										<Link
+											to={`/overview/${prompt._id}`}
+											key={prompt._id}
+										>
+											<Prompt key={prompt._id} prompt={prompt} />
+										</Link>
+									);
+								})
+							) : (
+								<Center>No content.</Center>
+							)}
+						</GridItem>
+					</Grid>
+				</Center>
+			)}
+
+			<Modal open={modalOpen}>
+				<PromptEntryForm
+					list={list}
+					setList={setList}
+					setModalOpen={toggleModalOpen}
+				/>
+			</Modal>
 		</Layout>
 	);
 }

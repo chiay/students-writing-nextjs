@@ -1,6 +1,9 @@
 import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
+	styles: {
+		global: {},
+	},
 	fonts: {
 		body: 'Commissioner',
 	},
@@ -23,9 +26,24 @@ const theme = extendTheme({
 				color: 'red.700',
 			},
 		},
+		Heading: {
+			baseStyle: {
+				color: 'red.700',
+				fontWeight: '400',
+				fontFamily: 'inherit',
+				lineHeight: '120%',
+			},
+		},
 		Text: {
 			baseStyle: {
 				color: 'red.700',
+				lineHeight: '200%',
+			},
+		},
+		FormLabel: {
+			baseStyle: {
+				color: 'red.700',
+				lineHeight: '200%',
 			},
 		},
 	},

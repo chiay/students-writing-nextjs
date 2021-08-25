@@ -4,6 +4,21 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from 'draftail';
+import {
+	Alert,
+	AlertIcon,
+	HStack,
+	Checkbox,
+	Button,
+	Input,
+	Select,
+	Container,
+	Spacer,
+	Center,
+	FormControl,
+	FormLabel,
+	FormErrorMessage,
+} from '@chakra-ui/react';
 
 export default function PromptEntryForm({
 	id,
@@ -171,87 +186,98 @@ export default function PromptEntryForm({
 	}
 
 	return (
-		<div className="content flex flex-jc-c">
+		<Container minW="xl">
 			{error && (
-				<div className="error">
-					<label>{error}</label>
-				</div>
+				<Alert status="error">
+					<AlertIcon />
+					{error}
+				</Alert>
 			)}
-			<form
-				className="flex flex-col flex-jc-c"
-				onSubmit={handleSubmit(prompt ? editPrompt : createPrompt)}
-			>
-				<label className="formLabel">Title / Question *</label>
-				<input
-					name="title"
-					type="text"
-					required
-					{...register('title', { required: true })}
-				/>
-				{errors.title?.type === 'required' && (
-					<p className="">This field is required.</p>
-				)}
+			<form onSubmit={handleSubmit(prompt ? editPrompt : createPrompt)}>
+				<FormControl isInvalid={errors.title} isRequired>
+					<FormLabel htmlFor="title">Title / Question</FormLabel>
+					<Input
+						id="title"
+						type="text"
+						required
+						{...register('title', { required: 'This is required' })}
+					/>
+					<FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+				</FormControl>
+				<FormControl>
+					<FormLabel htmlFor="description">Description</FormLabel>
+					<Input
+						name="description"
+						type="text"
+						{...register('description')}
+					/>
+				</FormControl>
+				<FormControl>
+					<FormLabel htmlFor="content">
+						Content (e.g. passage, extra info, etc.)
+					</FormLabel>
+					<Controller
+						render={() => (
+							<DraftailEditor
+								editorState={editorState}
+								onChange={setEditorState}
+								blockTypes={[{ type: BLOCK_TYPE.UNSTYLED }]}
+								inlineStyles={[
+									{ type: INLINE_STYLE.BOLD },
+									{ type: INLINE_STYLE.ITALIC },
+									{ type: INLINE_STYLE.UNDERLINE },
+								]}
+							/>
+						)}
+						name="DraftEditor"
+						control={control}
+					/>
+				</FormControl>
 
-				<label className="formLabel">Description</label>
-				<input
-					name="description"
-					type="text"
-					{...register('description')}
-				/>
-
-				<label className="formLabel">
-					Content (e.g. passage, extra info, etc.)
-				</label>
-				<Controller
-					render={() => (
-						<DraftailEditor
-							editorState={editorState}
-							onChange={setEditorState}
-							blockTypes={[{ type: BLOCK_TYPE.UNSTYLED }]}
-							inlineStyles={[
-								{ type: INLINE_STYLE.BOLD },
-								{ type: INLINE_STYLE.ITALIC },
-								{ type: INLINE_STYLE.UNDERLINE },
-							]}
-						/>
-					)}
-					name="DraftEditor"
-					control={control}
-				/>
-
-				<label className="formLabel">Type*</label>
-				<select name="type" {...register('type')}>
-					{types.map((type) => (
-						<option key={type.value} value={type.value}>
-							{type.label}
-						</option>
-					))}
-				</select>
-				<label className="formLabel">Grade*</label>
-				<div className="flex flex-jc-sa">
-					{grades.map((grade) => {
-						return (
-							<label key={`grade_${grade.label}`}>
-								<input
-									type="checkbox"
-									name={`grade_${grade.label}`}
-									value={true}
-									{...register(`grade_${grade.label}`)}
-								/>
-								{grade.label}
-							</label>
-						);
-					})}
-				</div>
-				<div className="buttonPanel flex flex-jc-c flex-ai-c">
-					<button type="button" onClick={setModalOpen}>
+				<FormControl isRequired>
+					<FormLabel htmlFor="type">Type</FormLabel>
+					<Select name="type" {...register('type')}>
+						{types.map((type) => (
+							<option key={type.value} value={type.value}>
+								{type.label}
+							</option>
+						))}
+					</Select>
+				</FormControl>
+				<FormControl isRequired>
+					<FormLabel htmlFor="grade">Grade</FormLabel>
+					<HStack>
+						{grades.map((grade) => {
+							return (
+								<>
+									<Checkbox
+										name={`grade_${grade.label}`}
+										value={true}
+										key={`grade_${grade.label}`}
+										{...register(`grade_${grade.label}`)}
+									>
+										{grade.label}
+									</Checkbox>
+									<Spacer />
+								</>
+							);
+						})}
+					</HStack>
+				</FormControl>
+				<Center spacing="2rem" my="0.5rem">
+					<Button onClick={setModalOpen} mx="0.5rem">
 						Close
-					</button>
-					<button type="submit" disabled={loading}>
+					</Button>
+					<Button
+						type="submit"
+						isLoading={loading}
+						mx="0.5rem"
+						loadingText="Submitting"
+					>
 						Submit
-					</button>
-				</div>
+					</Button>
+				</Center>
 			</form>
-		</div>
+		</Container>
 	);
 }

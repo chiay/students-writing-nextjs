@@ -6,6 +6,7 @@ import {
 	GridItem,
 	Box,
 	Image,
+	Heading,
 	Text,
 	Flex,
 	Button,
@@ -41,23 +42,23 @@ export default function Hero() {
 		>
 			<GridItem order={['2', '2', '2', '1']}>
 				<Flex justify="center" align="center">
-					<Box
-						lineHeight="2"
-						p="1rem"
-						textAlign={['center', 'center', 'center', 'left']}
-					>
-						<Text fontSize={['xl', '2xl', '3xl', '5xl']}>
+					<Box p="1rem" textAlign={['center', 'center', 'center', 'left']}>
+						<Heading fontSize={['xl', '2xl', '3xl', '5xl']}>
 							Welcome to Students Writing!
-						</Text>
-						<Text fontSize={['sm', 'md', 'lg']} color="gray.600">
+						</Heading>
+						<Text fontSize={['sm', 'md', 'lg']} color="gray.400">
 							Sentences, Paragraphs, Essays - All become easy with
 							structure
 						</Text>
-						<Text fontSize={['sm', 'md', 'lg']} color="gray.600">
+						<Text fontSize={['sm', 'md', 'lg']} color="gray.400">
 							Learn the structure, view the edits, master writing
 						</Text>
-						<Button onClick={handleClick} mt="1rem">
-							Start here <ArrowForwardIcon ml="0.5rem" />
+						<Button
+							onClick={handleClick}
+							mt="1rem"
+							rightIcon={<ArrowForwardIcon />}
+						>
+							Start here
 						</Button>
 					</Box>
 				</Flex>
