@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 	try {
 		const prompts = await Prompt.find(
 			{},
-			{ posts: 0 },
+			{ posts: 0, content: 0 },
 			{ sort: { createdOn: -1 } }
 		);
 		res.status(200).json(prompts);

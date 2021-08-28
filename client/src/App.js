@@ -1,20 +1,22 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import theme from './styles/theme';
-import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import { AuthProvider } from './contexts/AuthContext';
 import Dashboard from './pages/Dashboard';
 import PromptList from './pages/PromptList';
 import PromptOverview from './pages/PromptOverview';
-import PrivateRoute from './components/PrivateRoute';
 import UserList from './pages/UserList';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
+	const queryClient = new QueryClient();
+
 	return (
-		<ChakraProvider theme={theme}>
+		<QueryClientProvider client={queryClient}>
 			<AuthProvider>
 				<Router>
 					<Switch>
@@ -28,7 +30,8 @@ function App() {
 					</Switch>
 				</Router>
 			</AuthProvider>
-		</ChakraProvider>
+			<ReactQueryDevtools initialIsOpen={false} />
+		</QueryClientProvider>
 	);
 }
 

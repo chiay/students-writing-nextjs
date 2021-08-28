@@ -1,48 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import Layout from '../components/Layout';
-import axios from 'axios';
-import Prompt from '../components/Prompt';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { useAuth } from '../contexts/AuthContext';
+import { fetchPrompts } from '../api/Prompt';
+import Layout from '../components/Layout';
+import Prompt from '../components/Prompt';
 import Modal from '../components/Modal';
 import PromptEntryForm from '../components/PromptEntryForm';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import { Spinner, IconButton, Center, Grid, GridItem } from '@chakra-ui/react';
+import {
+	Alert,
+	AlertIcon,
+	AlertTitle,
+	AlertDescription,
+	CloseButton,
+	Spinner,
+	IconButton,
+	Center,
+	Grid,
+	GridItem,
+} from '@chakra-ui/react';
 
 export default function PromptList() {
-	const [list, setList] = useState();
-	const [loading, setLoading] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
-
 	const { currentUser } = useAuth();
 
-	useEffect(() => {
-		setLoading(true);
-		let cancel;
-
-		const getList = async () => {
-			try {
-				const { data } = await axios.get('/api/prompt', {
-					cancelToken: new axios.CancelToken((c) => (cancel = c)),
-				});
-				if (data) setList(data);
-			} catch (err) {
-				console.log('Unable to fetch data from server.');
-			}
-		};
-
-		getList();
-		setLoading(false);
-		return () => cancel();
-	}, []);
+	const {
+		data: list,
+		isLoading,
+		isError,
+		error,
+	} = useQuery('prompts', fetchPrompts);
 
 	function toggleModalOpen() {
 		setModalOpen(!modalOpen);
 	}
 
+	if (isError)
+		return (
+			<Alert>
+				<AlertIcon />
+				<AlertTitle mr={2}>Oops!</AlertTitle>
+				<AlertDescription>{error}</AlertDescription>
+				<CloseButton position="absolute" right="8px" top="8px" />
+			</Alert>
+		);
+
 	return (
 		<Layout>
-			{loading && (
+			{isLoading && (
 				<Center>
 					<Spinner
 						mt="2rem"
@@ -54,7 +60,7 @@ export default function PromptList() {
 				</Center>
 			)}
 
-			{!loading && (
+			{!isLoading && (
 				<Center>
 					<Grid minW="80vw" templateColumns="repeat(12, 1fr)">
 						<GridItem colSpan="12" colStart="12">
@@ -75,7 +81,7 @@ export default function PromptList() {
 											to={`/overview/${prompt._id}`}
 											key={prompt._id}
 										>
-											<Prompt key={prompt._id} prompt={prompt} />
+											<Prompt prompt={prompt} />
 										</Link>
 									);
 								})
@@ -88,11 +94,7 @@ export default function PromptList() {
 			)}
 
 			<Modal open={modalOpen}>
-				<PromptEntryForm
-					list={list}
-					setList={setList}
-					setModalOpen={toggleModalOpen}
-				/>
+				<PromptEntryForm list={list} setModalOpen={toggleModalOpen} />
 			</Modal>
 		</Layout>
 	);

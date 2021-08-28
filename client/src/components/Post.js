@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 import axios from 'axios';
-//import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import {
 	filterStructure,
@@ -9,8 +8,11 @@ import {
 	getTags,
 } from '../utils/SentenceChecker/StructureChecker';
 import CheckModal from './CheckModal';
+import { Box, Container, Text, Button, HStack, Spacer } from '@chakra-ui/react';
+import PostDeleteButton from './PostDeleteButton';
+import PostContent from './PostContent';
 
-export default function Post({ userPost, currentUser, setError, id }) {
+export default function Post({ userPost, currentUser, id }) {
 	const isOwner = currentUser
 		? userPost.postedBy.email === currentUser.data.email
 		: false;
@@ -20,7 +22,7 @@ export default function Post({ userPost, currentUser, setError, id }) {
 	// 	},
 	// });
 	const [checkModalOpen, setCheckModalOpen] = useState(false);
-	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
 	// const [editModalOpen, setEditModalOpen] = useState(false);
 	const { token } = useAuth();
 
@@ -33,14 +35,6 @@ export default function Post({ userPost, currentUser, setError, id }) {
 			Authorization: `Bearer ${token}`,
 		},
 	};
-
-	function handleDeleteModalClose() {
-		setDeleteModalOpen(false);
-	}
-
-	function handleDeleteModalOpen() {
-		setDeleteModalOpen(true);
-	}
 
 	function handleCheckModalOpen() {
 		setCheckModalOpen(true);
@@ -73,23 +67,6 @@ export default function Post({ userPost, currentUser, setError, id }) {
 	// 	setEditModalOpen(true);
 	// }
 
-	async function handlePostDelete() {
-		try {
-			setError('');
-			await axios.patch(
-				`/api/prompt/${id}/delete/${userPost._id}`,
-				{},
-				config
-			);
-		} catch (err) {
-			console.log(err, 'Unable to delete answer.');
-			setError('Unable to delete your answer. Please try again later.');
-		}
-
-		handleDeleteModalClose();
-		window.location.replace(`/overview/${id}`);
-	}
-
 	// async function editPost(data) {
 	// 	const { post } = data;
 	// 	try {
@@ -105,51 +82,32 @@ export default function Post({ userPost, currentUser, setError, id }) {
 	// }
 
 	return (
-		<div className="post">
-			<div className="post__metadata">
-				<label className="writer flex">
-					Writer:{' '}
-					{userPost.postedBy.alias
-						? userPost.postedBy.alias
-						: userPost.postedBy.email}
-				</label>
-				<label className="datetime">
-					Date: {new Date(userPost.updatedOn).toLocaleString()}
-				</label>
-			</div>
-			<p className="post__text">{userPost.text}</p>
+		<Container
+			minW="60vw"
+			px="2rem"
+			py="1rem"
+			my="1rem"
+			border="1px"
+			borderColor="gray.300"
+			borderRadius="1rem"
+		>
+			<PostContent userPost={userPost} />
 			{isOwner && (
 				<>
-					<div className="post__control flex flex-jc-fe">
-						<button type="button" onClick={handleCheckModalOpen}>
-							Check
-						</button>
-						{/* <button type="button" onClick={handleEditModalOpen}>
+					<HStack spacing="1rem">
+						<Spacer />
+						<Button onClick={handleCheckModalOpen}>Check</Button>
+						{/* <Button onClick={handleEditModalOpen}>
 							Edit
-						</button> */}
-						<button type="button" onClick={handleDeleteModalOpen}>
-							Delete
-						</button>
-					</div>
+						</Button> */}
+						<PostDeleteButton pid={userPost._id} />
+					</HStack>
 					<Modal open={checkModalOpen}>
 						<CheckModal
 							checkResult={checkResult}
 							tags={tags}
 							handleCheckModalClose={handleCheckModalClose}
 						/>
-					</Modal>
-					<Modal open={deleteModalOpen}>
-						<div className="modal__content flex flex-col flex-jc-c">
-							<label>Are you sure you want to delete this post?</label>
-							<div className="control flex flex-jc-c">
-								<button type="button" onClick={handleDeleteModalClose}>
-									No
-								</button>
-								<button type="button" onClick={handlePostDelete}>
-									Yes
-								</button>
-							</div>
-						</div>
 					</Modal>
 					{/* <Modal open={editModalOpen}>
 						<div className="modal__content flex flex-jc-c">
@@ -175,6 +133,6 @@ export default function Post({ userPost, currentUser, setError, id }) {
 					</Modal> */}
 				</>
 			)}
-		</div>
+		</Container>
 	);
 }
